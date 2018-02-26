@@ -125,7 +125,7 @@ type ProxyTLVHeader struct {
 }
 
 func (pt *ProxyTLVHeader) String() string {
-	return fmt.Sprintf("TLVHeader Type: %+v Length: %x", pt.Type, pt.Length)
+	return fmt.Sprintf("TLVHeader Type: %d Length: %d", int(pt.Type), int(pt.Length))
 }
 
 // ProxyTLV proxy v2 TLV
@@ -135,7 +135,7 @@ type ProxyTLV struct {
 }
 
 func (pt *ProxyTLV) String() string {
-	return fmt.Sprintf("TLV Hdr: %+v Data: %x", pt.Hdr, pt.Data)
+	return fmt.Sprintf("TLV Hdr: %s Data: %x", pt.Hdr, pt.Data)
 }
 
 // ProxyV2Info info from the proxy v2 header

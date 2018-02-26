@@ -70,6 +70,21 @@ func (p *ProxyConn) RemoteAddr() net.Addr {
 	return p.Conn.RemoteAddr()
 }
 
+// Info proxy info
+func (p *ProxyConn) Info() *ProxyV2Info {
+	return p.proxyInfo
+}
+
+// ReadCounter count of bytes read
+func (p *ProxyConn) ReadCounter() uint64 {
+	return p.readCounter
+}
+
+// WriteCounter count of bytes written
+func (p *ProxyConn) WriteCounter() uint64 {
+	return p.writeCounter
+}
+
 // Read implements the Conn Read method.
 func (p *ProxyConn) Read(b []byte) (n int, err error) {
 	p.once.Do(p.readProxyV2)
@@ -100,7 +115,7 @@ func (p *ProxyConn) readProxyV2() {
 
 	signature, err := checkSignature(p.Conn)
 	if err != nil {
-		p.Close()
+		p.Conn.Close()
 		p.config.ProxyHeaderError(errors.Wrap(err, "failed to check signature"))
 		return
 	}
@@ -109,14 +124,14 @@ func (p *ProxyConn) readProxyV2() {
 
 	state, err := readV2Info(p.Conn)
 	if err != nil {
-		p.Close()
+		p.Conn.Close()
 		p.config.ProxyHeaderError(errors.Wrap(err, "failed to read v2 header"))
 		return
 	}
 
 	err = state.Parse()
 	if err != nil {
-		p.Close()
+		p.Conn.Close()
 		p.config.ProxyHeaderError(errors.Wrap(err, "failed to parse header"))
 		return
 	}
