@@ -77,7 +77,7 @@ func (ph *ProxyV2Info) Parse() error {
 		}
 		ph.V4Addr = addr
 	default:
-		return errors.Errorf("Unknown Family: ", ph.Hdr.Family)
+		return errors.Errorf("Unknown Family: %s", ph.Hdr.Family)
 	}
 
 	remainder := int(ph.Hdr.Length - TCPOverIPV4AddrSize)
@@ -88,7 +88,7 @@ func (ph *ProxyV2Info) Parse() error {
 	}
 
 	if remainder-tlvTotal < 0 {
-		return errors.Errorf("Data parse failed result left over: ", remainder-tlvTotal)
+		return errors.Errorf("Data parse failed result left over: %s", remainder-tlvTotal)
 	}
 
 	ph.TLVs = tlvs
@@ -160,7 +160,7 @@ func readV2Info(rd io.Reader) (*ProxyV2Info, error) {
 
 	// sanity check the length
 	if proxyHeaderLen < 0 || proxyHeaderLen > MaxProxyHeaderLength {
-		return nil, errors.Errorf("bad header length supplied: %n", proxyHeaderLen)
+		return nil, errors.Errorf("bad header length supplied: %d", proxyHeaderLen)
 	}
 
 	state := new(ProxyV2Info)
@@ -210,7 +210,7 @@ func readTLVData(rd io.Reader, length int) ([]byte, error) {
 
 	// sanity check the length
 	if length < 0 || length > MaxProxyTLVLength {
-		return nil, errors.Errorf("bad TLV length supplied: %n", length)
+		return nil, errors.Errorf("bad TLV length supplied: %d", length)
 	}
 
 	tlvData := make([]byte, length)
