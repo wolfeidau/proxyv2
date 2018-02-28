@@ -4,6 +4,9 @@ TEST_OPTIONS?=
 
 GO ?= go
 
+ci: setup lint test
+.PHONY: ci
+
 # Install all the build and lint dependencies
 setup:
 	@$(GO) get -u github.com/golang/dep/cmd/dep

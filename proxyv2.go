@@ -77,7 +77,7 @@ func (ph *ProxyV2Info) Parse() error {
 		}
 		ph.V4Addr = addr
 	default:
-		return errors.Errorf("Unknown Family: %s", ph.Hdr.Family)
+		return errors.Errorf("Unknown Family: %d", ph.Hdr.Family)
 	}
 
 	remainder := int(ph.Hdr.Length - TCPOverIPV4AddrSize)
@@ -88,7 +88,7 @@ func (ph *ProxyV2Info) Parse() error {
 	}
 
 	if remainder-tlvTotal < 0 {
-		return errors.Errorf("Data parse failed result left over: %s", remainder-tlvTotal)
+		return errors.Errorf("Data parse failed result left over: %d", remainder-tlvTotal)
 	}
 
 	ph.TLVs = tlvs
